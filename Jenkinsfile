@@ -5,7 +5,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'docker build --pull --rm -f Dockerfile -t blog:latest .'
+                sh 'docker build --pull --rm -f "Dockerfile" -t blog:latest "."'
             }
         }
 
@@ -50,4 +50,4 @@ pipeline {
             }
         }
     }
-}
+}   
