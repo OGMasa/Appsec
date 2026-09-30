@@ -2,26 +2,22 @@ pipeline {
     agent any
 
     stages {
-        stage('Install Dependencies') {
-            steps {
-                sh 'npm ci'
-            }
-        }
 
         stage('Build') {
             steps {
-                sh 'docker build --pull --rm -f "Dockerfile" -t blog:latest "."'
+                sh 'docker build --pull --rm -f Dockerfile -t blog:latest .'
             }
         }
 
         stage('Trivy Scan') {
             steps {
                 sh '''
-                rm -f "$WORKSPACE/trivy-report.txt"
-                trivy image \
-                --format table \
-                --output "$WORKSPACE/trivy-report.txt" \
-                blog:latest
+                    rm -f "$WORKSPACE/trivy-report.txt"
+
+                    trivy image \
+                    --format table \
+                    --output "$WORKSPACE/trivy-report.txt" \
+                    blog:latest
                 '''
             }
         }
@@ -47,9 +43,9 @@ pipeline {
         stage('Nikto Scan') {
             steps {
                 sh '''
-                docker run --rm --network host \
-                hackllc/nikto \
-                -h http://127.0.0.1:3000
+                    docker run --rm --network host \
+                    hackllc/nikto \
+                    -h http://127.0.0.1:3000
                 '''
             }
         }
